@@ -29,4 +29,6 @@ dependencies {
 
     compile 'com.j256.ormlite:ormlite-android:4.45'
 
+    compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
+
 }

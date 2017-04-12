@@ -13,7 +13,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button"
+        android:layout_above="@+id/load_info_button"
         android:layout_alignParentTop="true">
 
         <RelativeLayout
@@ -63,7 +63,7 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/load_info_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

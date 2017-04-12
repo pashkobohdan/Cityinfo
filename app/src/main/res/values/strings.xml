@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">City info</string>
+    <string name="act_full_info">Full info</string>
+    <string name="act_all_cities">All cities</string>
 </resources>

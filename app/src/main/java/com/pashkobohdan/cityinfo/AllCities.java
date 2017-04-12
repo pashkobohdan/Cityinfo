@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -32,7 +33,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AllCities extends AppCompatActivity {
-
 
     private class DownloadAndWriteDataTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -175,8 +175,12 @@ public class AllCities extends AppCompatActivity {
                 Toast.makeText(AllCities.this, "Data reading error", Toast.LENGTH_SHORT).show();
                 finish();
             } else if (sources.size() == 0) {
-                // need load data !
-                new DownloadAndWriteDataTask().execute();
+                if(Application.isOnline(AllCities.this)){
+                    new DownloadAndWriteDataTask().execute();
+                }else{
+                    Toast.makeText(AllCities.this, "Please, turn on the Internet connection and try later", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             } else {
                 Collections.sort(sources, new Comparator<CountryModel>() {
                     @Override
@@ -193,6 +197,10 @@ public class AllCities extends AppCompatActivity {
     private Spinner countries;
     private Spinner cities;
 
+    private Button loadInfOButton;
+    private List<CountryModel> globalCountryList;
+    private List<CityModel> globalCityList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,10 +209,25 @@ public class AllCities extends AppCompatActivity {
         countries = (Spinner) findViewById(R.id.countries);
         cities = (Spinner) findViewById(R.id.cities);
 
+        loadInfOButton = (Button)findViewById(R.id.load_info_button);
+
+        loadInfOButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AllCities.this, FullInfo.class);
+                intent.putExtra("city", globalCityList.get(cities.getSelectedItemPosition()).getName());
+                intent.putExtra("country",globalCountryList.get(countries.getSelectedItemPosition()).getName());
+
+                startActivity(intent);
+            }
+        });
+
         new TryReadDataFromDBTask().execute();
     }
 
     private void refreshSpinnersData(final List<CountryModel> countriesList) {
+        globalCountryList = countriesList;
+
         countries.setAdapter(new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, countriesList));
         countries.setSelection(0);
 
@@ -213,23 +236,28 @@ public class AllCities extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(AllCities.this, "cities: " + countriesList.get(position).getCitiesList().size(), Toast.LENGTH_SHORT).show();
 
-                final List<CityModel> citiesList = new LinkedList<>(countriesList.get(position).getCitiesList());
-                cities.setAdapter(new ArrayAdapter<>(AllCities.this, R.layout.support_simple_spinner_dropdown_item, citiesList));
-                cities.setSelection(0);
-
-                cities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                globalCityList = new LinkedList<>(countriesList.get(position).getCitiesList());
+                Collections.sort(globalCityList, new Comparator<CityModel>() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(AllCities.this, FullInfo.class);
-                        intent.putExtra("city", citiesList.get(position).getName());
-                        intent.putExtra("country", citiesList.get(position).getCountry().getName());
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
+                    public int compare(CityModel o1, CityModel o2) {
+                        return o1.getName().compareTo(o2.getName());
                     }
                 });
+
+                cities.setAdapter(new ArrayAdapter<>(AllCities.this, R.layout.support_simple_spinner_dropdown_item, globalCityList));
+                cities.setSelection(0);
+
+//                cities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> parent) {
+//
+//                    }
+//                });
             }
 
             @Override

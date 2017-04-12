@@ -3,6 +3,8 @@
     package="com.pashkobohdan.cityinfo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application
         android:name=".Application"
@@ -11,14 +13,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AllCities">
+        <activity android:name=".AllCities" android:label="@string/act_all_cities">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FullInfo"></activity>
+        <activity android:name=".FullInfo" android:label="@string/act_full_info"></activity>
     </application>
 
 </manifest>
