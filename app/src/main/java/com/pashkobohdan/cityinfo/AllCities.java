@@ -33,6 +33,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AllCities extends AppCompatActivity {
+    private DownloadAndWriteDataTask downloadAndWriteDataTask;
+    private TryReadDataFromDBTask tryReadDataFromDBTask;
 
     private class DownloadAndWriteDataTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -99,6 +101,9 @@ public class AllCities extends AppCompatActivity {
                 Iterator<String> keys = object.keys();
                 while (keys.hasNext()) {
                     String country = keys.next();
+                    if (country.equals("")) {
+                        continue;
+                    }
 
                     CountryModel newCountry = new CountryModel();
                     newCountry.setName(country);
@@ -108,8 +113,13 @@ public class AllCities extends AppCompatActivity {
                     JSONArray arrayJson = object.getJSONArray(country);
 
                     for (int i = 0; i < arrayJson.length(); i++) {
+                        String cityName = arrayJson.getString(i);
+                        if (cityName.equals("")) {
+                            continue;
+                        }
+
                         CityModel newCity = new CityModel();
-                        newCity.setName(arrayJson.getString(i));
+                        newCity.setName(cityName);
 
                         newCity.setCountry(newCountry);
                         allCities.add(newCity);
@@ -169,15 +179,20 @@ public class AllCities extends AppCompatActivity {
         protected void onPostExecute(List<CountryModel> sources) {
             super.onPostExecute(sources);
 
-            progressDialog.dismiss();
+            try {
+                progressDialog.dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             if (sources == null) {
                 Toast.makeText(AllCities.this, "Data reading error", Toast.LENGTH_SHORT).show();
                 finish();
             } else if (sources.size() == 0) {
-                if(Application.isOnline(AllCities.this)){
-                    new DownloadAndWriteDataTask().execute();
-                }else{
+                if (Application.isOnline(AllCities.this)) {
+                    downloadAndWriteDataTask = new DownloadAndWriteDataTask();
+                    downloadAndWriteDataTask.execute();
+                } else {
                     Toast.makeText(AllCities.this, "Please, turn on the Internet connection and try later", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -209,20 +224,21 @@ public class AllCities extends AppCompatActivity {
         countries = (Spinner) findViewById(R.id.countries);
         cities = (Spinner) findViewById(R.id.cities);
 
-        loadInfOButton = (Button)findViewById(R.id.load_info_button);
+        loadInfOButton = (Button) findViewById(R.id.load_info_button);
 
         loadInfOButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AllCities.this, FullInfo.class);
                 intent.putExtra("city", globalCityList.get(cities.getSelectedItemPosition()).getName());
-                intent.putExtra("country",globalCountryList.get(countries.getSelectedItemPosition()).getName());
+                intent.putExtra("country", globalCountryList.get(countries.getSelectedItemPosition()).getName());
 
                 startActivity(intent);
             }
         });
 
-        new TryReadDataFromDBTask().execute();
+        tryReadDataFromDBTask = new TryReadDataFromDBTask();
+        tryReadDataFromDBTask.execute();
     }
 
     private void refreshSpinnersData(final List<CountryModel> countriesList) {
@@ -230,12 +246,11 @@ public class AllCities extends AppCompatActivity {
 
         countries.setAdapter(new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, countriesList));
         countries.setSelection(0);
+        globalCityList = new LinkedList<>(globalCountryList.get(0).getCitiesList());
 
         countries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(AllCities.this, "cities: " + countriesList.get(position).getCitiesList().size(), Toast.LENGTH_SHORT).show();
-
                 globalCityList = new LinkedList<>(countriesList.get(position).getCitiesList());
                 Collections.sort(globalCityList, new Comparator<CityModel>() {
                     @Override
@@ -246,18 +261,6 @@ public class AllCities extends AppCompatActivity {
 
                 cities.setAdapter(new ArrayAdapter<>(AllCities.this, R.layout.support_simple_spinner_dropdown_item, globalCityList));
                 cities.setSelection(0);
-
-//                cities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> parent) {
-//
-//                    }
-//                });
             }
 
             @Override
@@ -265,6 +268,18 @@ public class AllCities extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (tryReadDataFromDBTask != null) {
+            tryReadDataFromDBTask.cancel(true);
+        }
+
+        if (downloadAndWriteDataTask != null) {
+            downloadAndWriteDataTask.cancel(true);
+        }
     }
 }

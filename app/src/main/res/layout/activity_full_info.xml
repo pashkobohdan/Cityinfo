@@ -4,19 +4,16 @@
     android:id="@+id/activity_full_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.pashkobohdan.cityinfo.FullInfo">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/textView3"
@@ -33,18 +30,30 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/textView3" />
+                android:layout_below="@+id/textView3"
+                android:textSize="18sp" />
+
+            <!--android:adjustViewBounds="true"-->
+            <!--android:scaleType="fitXY"-->
+            <ImageView
+
+                android:id="@+id/picture"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/city_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/city_name"
+                android:layout_below="@+id/picture"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="Summary" />
 
             <TextView
+                android:textSize="18sp"
                 android:id="@+id/city_summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,6 +73,7 @@
                 android:text="Wiki URL" />
 
             <TextView
+                android:textSize="18sp"
                 android:autoLink="web"
                 android:id="@+id/url"
                 android:layout_width="wrap_content"
