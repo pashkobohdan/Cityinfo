@@ -237,6 +237,11 @@ public class AllCities extends AppCompatActivity {
             }
         });
 
+        if(!Application.isOnline(this)){
+            Toast.makeText(this, "Please, turn on the Internet connection and try later", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         tryReadDataFromDBTask = new TryReadDataFromDBTask();
         tryReadDataFromDBTask.execute();
     }

@@ -23,9 +23,9 @@ import java.net.URL;
 
 public class FullInfo extends AppCompatActivity {
 
-    Response response;
 
     private class TryDownloadFullInfoAboutCity extends AsyncTask<Void, Void, Boolean> {
+        private Response response;
 
         private static final String USER_API_NAME = "pashkobohdan@gmail.com";
         private static final String DATA_URL_PART_1 = " http://api.geonames.org/wikipediaSearchJSON?q=";
@@ -194,15 +194,6 @@ public class FullInfo extends AppCompatActivity {
         url.setText(cityInfo.getWikipediaUrl());
 
         new DownloadImageTask(picture).execute(cityInfo.getThumbnailImg());
-//        URL url = null;
-//        try {
-//            url = new URL(cityInfo.getThumbnailImg());
-//            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-//            picture.setImageBitmap(bmp);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -226,7 +217,6 @@ public class FullInfo extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap bmp) {
-            //bmp.getScaledHeight(picture.getWidth() / bmp.getWidth());
             try {
                 bmImage.setImageBitmap(Bitmap.createScaledBitmap(bmp,
                         picture.getWidth(),
