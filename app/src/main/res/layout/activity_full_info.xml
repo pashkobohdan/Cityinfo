@@ -33,8 +33,6 @@
                 android:layout_below="@+id/textView3"
                 android:textSize="18sp" />
 
-            <!--android:adjustViewBounds="true"-->
-            <!--android:scaleType="fitXY"-->
             <ImageView
 
                 android:id="@+id/picture"

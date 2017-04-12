@@ -108,7 +108,7 @@ public class AllCities extends AppCompatActivity {
                     CountryModel newCountry = new CountryModel();
                     newCountry.setName(country);
 
-                    HelperFactory.getHelper().getSourceDAO().create(newCountry);
+                    HelperFactory.getHelper().getCountryDAO().create(newCountry);
 
                     JSONArray arrayJson = object.getJSONArray(country);
 
@@ -128,7 +128,7 @@ public class AllCities extends AppCompatActivity {
                 }
 
 
-                HelperFactory.getHelper().getPostDAO().bulkInsertDataByCallBatchTasks(allCities);
+                HelperFactory.getHelper().getCityDAO().bulkInsertDataByCallBatchTasks(allCities);
             } catch (JSONException | SQLException e) {
                 e.printStackTrace();
 
@@ -168,7 +168,7 @@ public class AllCities extends AppCompatActivity {
         @Override
         protected List<CountryModel> doInBackground(Void... params) {
             try {
-                return HelperFactory.getHelper().getSourceDAO().getAllSources();
+                return HelperFactory.getHelper().getCountryDAO().getAllCountries();
             } catch (SQLException e) {
                 e.printStackTrace();
                 return null;

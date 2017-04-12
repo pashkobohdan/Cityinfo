@@ -13,22 +13,22 @@ import java.util.concurrent.Callable;
  * Created by bohdan on 01.04.17.
  */
 
-public class PostDao extends BaseDaoImpl<CityModel, Integer> {
+public class CityDAO extends BaseDaoImpl<CityModel, Integer> {
 
-    public PostDao(ConnectionSource connectionSource, Class<CityModel> dataClass) throws SQLException {
+    public CityDAO(ConnectionSource connectionSource, Class<CityModel> dataClass) throws SQLException {
         super(connectionSource, dataClass);
     }
 
-    public List<CityModel> getAllPosts() throws SQLException {
+    public List<CityModel> getAllCities() throws SQLException {
         return this.queryForAll();
     }
 
-    public void bulkInsertDataByCallBatchTasks(final Collection<CityModel> users) throws SQLException {
+    public void bulkInsertDataByCallBatchTasks(final Collection<CityModel> cities) throws SQLException {
         callBatchTasks(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
-                for (CityModel user : users) {
-                    create(user);
+                for (CityModel city : cities) {
+                    create(city);
                 }
                 return null;
             }

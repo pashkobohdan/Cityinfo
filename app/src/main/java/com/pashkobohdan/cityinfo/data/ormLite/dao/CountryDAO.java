@@ -12,13 +12,13 @@ import java.util.List;
  * Created by bohdan on 01.04.17.
  */
 
-public class SourceDao extends BaseDaoImpl<CountryModel, Integer> {
+public class CountryDAO extends BaseDaoImpl<CountryModel, Integer> {
 
-    public SourceDao(ConnectionSource connectionSource, Class<CountryModel> dataClass) throws SQLException {
+    public CountryDAO(ConnectionSource connectionSource, Class<CountryModel> dataClass) throws SQLException {
         super(connectionSource, dataClass);
     }
 
-    public List<CountryModel> getAllSources() throws SQLException {
+    public List<CountryModel> getAllCountries() throws SQLException {
         return this.queryForAll();
     }
 

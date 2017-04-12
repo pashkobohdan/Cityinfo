@@ -37,7 +37,7 @@ public class CountryModel {
 
     public void removePost(CityModel value) throws SQLException {
         citiesList.remove(value);
-        HelperFactory.getHelper().getPostDAO().delete(value);
+        HelperFactory.getHelper().getCityDAO().delete(value);
     }
 
 

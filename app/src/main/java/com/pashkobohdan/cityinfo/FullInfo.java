@@ -144,6 +144,11 @@ public class FullInfo extends AppCompatActivity {
                     Toast.makeText(FullInfo.this, "No data about this city", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
+                    for (CityInfo city : response.getGeonames()) {
+                        if (city != null && city.getFeature() != null && city.getFeature().equals("city")) {
+                            refreshData(city);
+                        }
+                    }
                     refreshData(response.getGeonames().get(0));
                 }
             } else {

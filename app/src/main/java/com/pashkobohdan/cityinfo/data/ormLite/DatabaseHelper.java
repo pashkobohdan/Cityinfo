@@ -9,8 +9,8 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.pashkobohdan.cityinfo.data.model.CityModel;
 import com.pashkobohdan.cityinfo.data.model.CountryModel;
-import com.pashkobohdan.cityinfo.data.ormLite.dao.PostDao;
-import com.pashkobohdan.cityinfo.data.ormLite.dao.SourceDao;
+import com.pashkobohdan.cityinfo.data.ormLite.dao.CityDAO;
+import com.pashkobohdan.cityinfo.data.ormLite.dao.CountryDAO;
 
 import java.sql.SQLException;
 
@@ -29,8 +29,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     //ссылки на DAO соответсвующие сущностям, хранимым в БД
-    private SourceDao sourceDao = null;
-    private PostDao postDao = null;
+    private CountryDAO sourceDao = null;
+    private CityDAO postDao = null;
 
     public DatabaseHelper(Context context){
         super(context,DATABASE_NAME, null, DATABASE_VERSION);
@@ -67,16 +67,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     //синглтон для GoalDAO
-    public SourceDao getSourceDAO() throws SQLException{
+    public CountryDAO getCountryDAO() throws SQLException{
         if(sourceDao == null){
-            sourceDao = new SourceDao(getConnectionSource(), CountryModel.class);
+            sourceDao = new CountryDAO(getConnectionSource(), CountryModel.class);
         }
         return sourceDao;
     }
     //синглтон для RoleDAO
-    public PostDao getPostDAO() throws SQLException{
+    public CityDAO getCityDAO() throws SQLException{
         if(postDao == null){
-            postDao = new PostDao(getConnectionSource(), CityModel.class);
+            postDao = new CityDAO(getConnectionSource(), CityModel.class);
         }
         return postDao;
     }
